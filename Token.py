@@ -49,4 +49,6 @@ class Token():
             return "LUGAR"
         elif self.tipo == self.FECHA:
             return 'FECHA'
+        elif self.tipo == self.DOS_PUNTOS:
+            return 'DOS PUNTOS'
         

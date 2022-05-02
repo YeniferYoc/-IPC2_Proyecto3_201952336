@@ -1,10 +1,12 @@
 from Empresa import *
+from Fecha import *
 class Solicitud:
-    def __init__(self, positivos, negativos, empresas, mensajes):
+    def __init__(self,fecha, positivos, negativos, empresas, mensajes):
         self.positivos = positivos
         self.negativos = negativos
         self.empresas = empresas
         self.mensajes = mensajes
+        self.fecha = fecha
         
     def getPositivos(self):
         return self.positivos
@@ -14,6 +16,7 @@ class Solicitud:
 
     def mostrar_solicitud(self):
         print("----------------------------------- SOLICITUD --------------------------------------")
+        print(self.fecha.dar_todo())
         print("POSITIVOS")
         for pos in self.positivos:
             print(pos)
@@ -25,5 +28,5 @@ class Solicitud:
             emp.mostrar_empresa()
         print("MENSAJES")
         for men in self.mensajes:
-            print(men)
+            men.dar_todo()
         

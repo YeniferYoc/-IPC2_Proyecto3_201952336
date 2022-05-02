@@ -1,5 +1,5 @@
-arreglo_pal_pos = ['bueno', 'excelente','satisfecho']
-mensaje = str('Lugar y fecha: Guatemala, 01/04/2022 15:01 Usuario: map0001@usac.edu Red social: Twitter El servicio en la USAC para inscripción fue muy bueno y me siento muy satisfecho.') 
+arreglo_pal_pos = ['buenom mi', 'excelente','jj']
+mensaje = str('Lugar y fecha: Guatemala, 01/04/2022 15:01 Usuario: map0001@usac.edu Red social: Twitter El servicio en la USAC para inscripción fue muy buen mi bueno mi o y me siento muy satisfecho.') 
 
 cont = 0
 for pal in arreglo_pal_pos:
