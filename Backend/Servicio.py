@@ -10,6 +10,6 @@ class Servicio:
         return self.nombre_ser
 
     def mostrar_servicio(self):
-        print("NOMBRE:  "+str(self.nombre_ser)+" buenos "+str(self.buenos)+" malos "+str(self.malos)+" neutros "+str(self.neutros))
+        print("NOMBRE Servicio:  "+str(self.nombre_ser)+" buenos "+str(self.buenos)+" malos "+str(self.malos)+" neutros "+str(self.neutros))
         for a in self.alias: 
             print(a)

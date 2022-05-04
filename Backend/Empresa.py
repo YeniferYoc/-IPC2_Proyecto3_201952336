@@ -14,6 +14,6 @@ class Empresa:
         return self.servicios
 
     def mostrar_empresa(self):
-        print("NOMBRE:  "+str(self.nombre)+" buenos "+str(self.buenos)+" malos "+str(self.malos)+" neutros "+str(self.neutros))
+        print("NOMBRE:  emp "+str(self.nombre)+" buenos "+str(self.buenos)+" malos "+str(self.malos)+" neutros "+str(self.neutros))
         for servicio in self.servicios: 
             servicio.mostrar_servicio()

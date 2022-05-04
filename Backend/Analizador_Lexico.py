@@ -3,28 +3,19 @@ from Token import Token
 class Analizador_Lexico():
     lexema = ''
     tokens= []
-    buenas = 0
-    malas= 0
     estado = 1
     fila = 1
     columna = 1
     generar = False
-    arr_buenas = []
-    arr_malas = []
-    contador_buenas = 0
-    contador_malas = 0
+ 
 
-    def analisis(self,entrada, arr_buenas, arr_malas):
+    def analisis(self,entrada):
         self.estado = 1
         self.lexema = ''
         self.tokens = []
         self.error = True
-        self.arr_buenas = arr_buenas
-        self.arr_malas = arr_malas
-        self.buenas = 0
-        self.malas = 0
         tipos = Token("lexema", -1)
-        print(entrada)
+        
 
         entrada = entrada + '#'
         #print(entrada)
@@ -244,25 +235,7 @@ class Analizador_Lexico():
         
         #return False
 
-    def Buenas_malas(self, buenas, malas):
-        entrada = self.lexema.upper() 
-        si_es = False
-
-        #palabras_reservadas = ["FORMULARIO","TIPO","VALOR","FONDO","NOMBRE", "VALORES", "EVENTO", "ENTRADA", "INFO"]
-        print(entrada)
-        for buena in buenas:
-            print(buena)
-            if entrada == buena.upper():
-                self.buenas += 1
-                si_es = True
-        for mala in malas:       
-            if entrada == mala.upper():
-                self.malas += 1
-                si_es = True
-        print(si_es)
-        
-        return si_es
-
+    
 
     def Imprimir(self):
         print("---------------------------------------------LISTA DE TOKENS ---------------------------------------------")
