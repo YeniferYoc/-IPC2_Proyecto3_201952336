@@ -1,6 +1,10 @@
+from sqlite3 import Date
 from tkinter import filedialog as fd
 from xml.dom import minidom
 from xml.dom.expatbuilder import parseString
+from Respuesta import *
+from jinja2 import FileSystemBytecodeCache
+from lista_men import lista_men
 from Mensaje import Mensaje
 from pyparsing import Regex
 from Empresa import Empresa
@@ -128,7 +132,7 @@ class Analisis():
                                 if tokens[i+2].tipo == tipos.NUMERO:
                                     if tokens[i+3].tipo == tipos.DIAGONAL:
                                         if tokens[i+4].tipo == tipos.NUMERO:
-                                            fecha_correcta = Fecha(int(tokens[i].lexema_valido), int(tokens[i+2].lexema_valido), int(tokens[i+4].lexema_valido))
+                                            fecha_correcta = Date(int(tokens[i+4].lexema_valido), int(tokens[i+2].lexema_valido), int(tokens[i].lexema_valido))
                                             fecha = fecha_correcta
 
                         
@@ -180,53 +184,65 @@ class Analisis():
                 solici.mostrar_solicitud()
             #self.Positivos_negativos(self.arreglo_solicitudes)
 
-    def Positivos_negativos(self):
-        arreglo_sol = self.arreglo_solicitudes
-        for sol in arreglo_sol:
+    def Positivos_negativos(self, arreglo_mensajes):
+        #arreglo_sol = self.arreglo_solicitudes
+            arreglo_sol = self.arreglo_solicitudes
+            sol = arreglo_sol[0]
+            arreglo_devolver = [None, None,0,0,0]
+        #for sol in arreglo_sol:
             diccionario_buenas = sol.positivos
             diccionario_malas = sol.negativos
-            mensajes = sol.mensajes
+            mensajes = arreglo_mensajes
             arreglo_emp = []
             cont_b = 0
             cont_m = 0
             cont_n = 0
-            cant_buenas = int(sol.mensajes[0].cant_buenas)
-            cant_malas = int(sol.mensajes[0].cant_malas)
+            cant_buenas = int(mensajes[0].cant_buenas)
+            cant_malas = int(mensajes[0].cant_malas)
+            contador_positivos = 0
+            contador_negativos = 0
+            contador_neutro = 0
             if cant_buenas == cant_malas:
                 print("mensaje neutro")
                 cont_n = 1
+                contador_neutro +=1
             elif cant_buenas < cant_malas:
                 print("mensjae negativo")
                 cont_m = 1
+                contador_negativos +=1
             else:
                 print("mensaje positivo")
+                contador_positivos += 1
                 cont_b = 1
-            for e in range(len(sol.mensajes[0].empresas)):
+            for e in range(len(mensajes[0].empresas)):
                 servicios_empresa = []
-                for ser in sol.mensajes[0].empresas[e].servicios:
+                for ser in mensajes[0].empresas[e].servicios:
                     nuevo_servicio= Servicio(ser.nombre_ser, ser.alias, cont_b,cont_m, cont_n)
                     servicios_empresa.append(nuevo_servicio)
-                nueva_emp = Empresa(sol.mensajes[0].empresas[e].nombre,servicios_empresa,cont_b, cont_m, cont_n)
+                nueva_emp = Empresa(mensajes[0].empresas[e].nombre,servicios_empresa,cont_b, cont_m, cont_n)
                 arreglo_emp.append(nueva_emp)
            
                 
-            for i in range(1, len(sol.mensajes)):
+            for i in range(1, len(mensajes)):
                         cont_b = 0
                         cont_m = 0
                         cont_n = 0
-                        cant_buenas = int(sol.mensajes[i].cant_buenas)
-                        cant_malas = int(sol.mensajes[i].cant_malas)
+                        cant_buenas = int(mensajes[i].cant_buenas)
+                        cant_malas = int(mensajes[i].cant_malas)
                         if cant_buenas == cant_malas:
                             print("mensaje neutro")
                             cont_n = 1
+                            contador_neutro +=1
                         elif cant_buenas < cant_malas:
+                            contador_negativos += 1
                             print("mensaje negativo")
                             cont_m = 1
                         else:
+                            contador_positivos += 1
                             print("mesnaje positvo")
                             cont_b = 1
-                        for j in range(len(sol.mensajes[i].empresas)):
-                            empresa_nom = str(sol.mensajes[i].empresas[j].nombre.upper())
+                        for j in range(len(mensajes[i].empresas)):
+                            empresa_nom = str(mensajes[i].empresas[j].nombre.upper())
                             encontre_emp = False
                             for m in range(len(arreglo_emp)):
                                 nom_emp_yaesta = str(arreglo_emp[m].nombre.upper())
@@ -236,9 +252,9 @@ class Analisis():
                                         arreglo_emp[m].buenos += cont_b
                                         arreglo_emp[m].malos += cont_m
                                         arreglo_emp[m].neutros += cont_n
-                                        for b in range(len(sol.mensajes[i].empresas[j].servicios)):
+                                        for b in range(len(mensajes[i].empresas[j].servicios)):
                                             encontre_serv = False
-                                            nom_serv = str(sol.mensajes[i].empresas[j].servicios[b].nombre_ser.upper())
+                                            nom_serv = str(mensajes[i].empresas[j].servicios[b].nombre_ser.upper())
                                             for t in range(len(arreglo_emp[m].servicios)):
                                                 nom_serv_yaesta = arreglo_emp[m].servicios[t].nombre_ser.upper()
                                                 if nom_serv == nom_serv_yaesta:
@@ -248,28 +264,36 @@ class Analisis():
                                                     arreglo_emp[m].servicios[t].malos += cont_m
                                                     arreglo_emp[m].servicios[t].neutros += cont_n
                                             if encontre_serv == False:
-                                                nom_s = sol.mensajes[i].empresas[j].servicios[b].nombre_ser
-                                                ali = sol.mensajes[i].empresas[j].servicios[b].alias
+                                                nom_s = mensajes[i].empresas[j].servicios[b].nombre_ser
+                                                ali = mensajes[i].empresas[j].servicios[b].alias
                                                 nuevo_servicioo = Servicio(nom_s, ali,cont_b, cont_m, cont_n)
                                                 arreglo_emp[m].servicios.append(nuevo_servicioo)
                             if encontre_emp == False:
                                     servicios_empresa = []
-                                    for ser in sol.mensajes[i].empresas[j].servicios:
+                                    for ser in mensajes[i].empresas[j].servicios:
                                         nuevo_servicio= Servicio(ser.nombre_ser, ser.alias, cont_b,cont_m, cont_n)
                                         servicios_empresa.append(nuevo_servicio)
-                                    nueva_emp = Empresa(sol.mensajes[i].empresas[j].nombre,servicios_empresa,cont_b, cont_m, cont_n)
+                                    nueva_emp = Empresa(mensajes[i].empresas[j].nombre,servicios_empresa,cont_b, cont_m, cont_n)
                                     arreglo_emp.append(nueva_emp)
                     
             solicitud_completa = Solicitud(sol.fecha, diccionario_buenas, diccionario_malas, arreglo_emp, mensajes)
             self.arreglo_respuesta.append(solicitud_completa)
             for emp in arreglo_emp:
                 emp.mostrar_empresa()
+            arreglo_devolver[0] = arreglo_emp
+            arreglo_devolver[1] = mensajes
+            arreglo_devolver[2] = contador_neutro
+            arreglo_devolver[3] = contador_negativos
+            arreglo_devolver[4] = contador_positivos
+            return arreglo_devolver
+            
 
     def Mensaje_prueba(self, mensaje):
                 analizador_mensaje = Analizador_Lexico()
                 arreglo_pal_neg = self.arreglo_solicitudes[0].negativos
                 arreglo_pal_pos = self.arreglo_solicitudes[0].positivos
                 arreglo_emp = self.arreglo_solicitudes[0].empresas
+                mensaje_prueb = None
                 
                     
                 doc = parseString(mensaje)
@@ -297,7 +321,7 @@ class Analisis():
                                 if tokens[i+2].tipo == tipos.NUMERO:
                                     if tokens[i+3].tipo == tipos.DIAGONAL:
                                         if tokens[i+4].tipo == tipos.NUMERO:
-                                            fecha_correcta = Fecha(int(tokens[i].lexema_valido), int(tokens[i+2].lexema_valido), int(tokens[i+4].lexema_valido))
+                                            fecha_correcta = Date(int(tokens[i+4].lexema_valido), int(tokens[i+2].lexema_valido), int(tokens[i].lexema_valido))
                                             fecha = fecha_correcta
 
                         
@@ -341,8 +365,125 @@ class Analisis():
                             empresas_mensaje.append(Empresa(emp.nombre, servicios_con_mensaje, cont, contador_malas,0))
                             print("empresas en mensaje"+str(len(empresas_mensaje)))
                     mensaje_prueb = Mensaje(fecha, mensaje, usuario, red,cont, contador_malas, empresas_mensaje)
-                    mensaje_prueb.dar_todo()
+                mensaje_prueb.dar_todo()
+
+                salida = self.generar_xml_mensaje_prueba(mensaje_prueb)
+                print(salida)
+                
+
                      
+    def Buscar_por_fecha(self, fecha1, fecha2, empresas):
+        arreglo_devolver =[]
+        arreglo_res = self.arreglo_respuesta
+
+
+        if fecha1.dia != 0 and fecha2 == 0:#QUIERE DECIR QUE SE QUIERE SOLO UNA FECHA
+            pass
+        elif fecha1 != 0 and fecha2 != 0: #SE QUIERE UN RANGO DE FECHAS
+            pass
+        pass    
+
+    def Generar_lista_respuestas(self):
+        todos_mensajes = self.arreglo_solicitudes[0].mensajes
+        lista_respuestas = []
+        lista_mensajes_a_ordenar = []
+        lista_mensajes_a_ordenar.append(todos_mensajes[0])
+        lista_mensajes_general = []
+        lista = lista_men(todos_mensajes[0].fecha,lista_mensajes_a_ordenar)
+        lista_mensajes_general.append(lista)
+        for i in range(1,len(todos_mensajes)): 
+            encontre_fecha = False
+            for j in range(len(lista_mensajes_general)):
+                if lista_mensajes_general[j].fecha == todos_mensajes[i].fecha:
+                    encontre_fecha = True
+                    lista_mensajes_general[j].mensajes.append(todos_mensajes[i])
+            if encontre_fecha == False:
+                nueva_lista = []
+                nueva_lista.append(todos_mensajes[i])
+                nueva_objeto = lista_men(todos_mensajes[i].fecha, nueva_lista)
+                lista_mensajes_general.append(nueva_objeto)
+        
+        for imp in lista_mensajes_general:
+            imp.dar_todo()
+        for a in lista_mensajes_general:
+            empresas_mensajes = self.Positivos_negativos(a.mensajes)
+            empresas = empresas_mensajes[0]
+            mensajes = empresas_mensajes[1]
+            neutros = empresas_mensajes[2]
+            positivos = empresas_mensajes[4]
+            negativos = empresas_mensajes[3]
+            total = neutros+positivos+negativos
+            nueva_respuesta = Respuesta(a.fecha,total, positivos, negativos, neutros,empresas,mensajes )
+            lista_respuestas.append(nueva_respuesta)
+        for respuesta in lista_respuestas:
+            respuesta.dar_todo()
+        respuesta_solicitud = self.generar_xml(lista_respuestas)
+        print(respuesta_solicitud)
+
+
+    def generar_xml(self, lista_res):
+        respuesta = '''
+        <?xml version="1.0"?>\n
+            <lista_respuestas>\n
+        '''
+        for respuesta_lista in lista_res:
+            respuesta += '<respuesta>\n'
+            respuesta+= '<fecha>'+str(respuesta_lista.fecha)+'</fecha>\n <mensajes>'
+            respuesta += '<total>'+str(respuesta_lista.total)+'</total>\n <positivos>'+str(respuesta_lista.positivos)+'</positivos>\n'
+            respuesta += '<negativos>'+str(respuesta_lista.negativos)+'</negativos>\n <neutros>'+str(respuesta_lista.neutros)+' </neutros></mensajes>\n <analisis>'
+            for empresa in respuesta_lista.empresas:
+                respuesta += '<empresa nombre=\"'+ str(empresa.nombre)+'\">\n <mensajes>'
+                total_men_emp = int(empresa.buenos)+int(empresa.malos)+int(empresa.neutros)
+                respuesta += '<total>'+str(total_men_emp)+'</total>\n <positivos>'+str(empresa.buenos)+'</positivos>'
+                respuesta += '<negativos>'+str(empresa.malos)+'</negativos> \n  <neutros>'+str(empresa.neutros)+'</neutros>'
+                respuesta += ' </mensajes>\n <servicios>\n '
+                for servicio in empresa.servicios:
+                    respuesta += '<servicio nombre=\"'+str(servicio.nombre_ser)+'\">\n <mensajes>'
+                    total_men_ser = int(servicio.buenos)+int(servicio.malos)+int(servicio.neutros)
+                    respuesta += '<total>'+str(total_men_ser)+'</total>\n <positivos>'+str(servicio.buenos)+'</positivos>'
+                    respuesta += '<negativos>'+str(servicio.malos)+'</negativos> \n  <neutros>'+str(servicio.neutros)+'</neutros>'
+                    respuesta += ' </mensajes>\n'
+                    respuesta += '</servicio>'
+                respuesta += '</servicios>'
+                respuesta += '</empresa>'
+            respuesta +='</analisis>'
+            respuesta += '</respuesta>'
+        respuesta += '</lista_respuestas>'
+        return respuesta
+    
+    def generar_xml_mensaje_prueba(self, mensaje):
+        respuesta = '<respuesta>\n '
+        respuesta += ' <fecha>'+str(mensaje.fecha)+'</fecha>\n'
+        respuesta += '<red_social>'+str(mensaje.red)+'</red_social>\n'
+        respuesta += '<usuario>'+str(mensaje.usuario)+'</usuario>\n'
+        respuesta += '<empresas>'
+        for empresa in mensaje.empresas:
+            respuesta += '<empresa nombre=\"'+str(empresa.nombre)+'\">\n'
+            for servicio in empresa.servicios:
+                respuesta += '<servicio>'+str(servicio.nombre_ser)+'</servicio>\n'
+            respuesta += '</empresa>\n'
+        respuesta += '</empresas>\n'
+        respuesta += '<palabras_positivas>'+str(mensaje.cant_buenas)+'</palabras_positivas>\n'
+        respuesta += '<palabras_negativas>'+str(mensaje.cant_malas)+'</palabras_negativas>\n'
+        total_palabras = int(mensaje.cant_buenas)+int(mensaje.cant_malas)
+        porcentaje_buenas = ((int(mensaje.cant_buenas)*100)/total_palabras)
+        porcentaje_malas = 100-porcentaje_buenas
+        respuesta += '<sentimiento_positivo>'+ str(porcentaje_buenas)+'% </sentimiento_positivo>\n'
+        respuesta += '<sentimiento_negativo>'+str(porcentaje_malas)+'% </sentimiento_negativo>\n'
+        buenas = int(mensaje.cant_buenas)
+        malas = int(mensaje.cant_malas)
+        sentimiento = 'neutro'
+        if buenas == malas:
+            sentimiento = 'neutro'
+        elif buenas < malas:
+            sentimiento = 'negativo'
+        else:
+            sentimiento = 'positivo'
+        respuesta += '<sentimiento_analizado>'+sentimiento+'</sentimiento_analizado>\n </respuesta>'
+        return respuesta
+
+
+
 
 
 
@@ -358,7 +499,10 @@ def main(): #METODO PRINCIPAL QUE INVOCA AL MENU2  TOP INFERIOR TEMPORADA <1999-
     archi1.close()
 
     app = Analisis(contenido)
-    app.Positivos_negativos()
+    #app.Positivos_negativos()
+
+    print("pureba")
+    #app.Generar_lista_respuestas()
 
     archi2=open('mensaje.xml', "r", encoding="utf-8")
     contenido=archi2.read()

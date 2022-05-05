@@ -29,26 +29,65 @@
                         <alias> asignado </alias>
                     </servicio>
                     <servicio nombre="graduación"> </servicio>
-            
+            </empresa>
+            <empresa> 
+                <nombre> sarita 
+                </nombre>
+                    <servicio nombre="ventas"> 
+                        <alias> vendedor </alias>
+                        <alias> vendieron </alias>
+                    </servicio>
+                    <servicio nombre="domicilios">
+                        <alias> domicilio </alias>
+                    </servicio>
+                    <servicio nombre="pasteles"> </servicio>
+            </empresa>
+
+            <empresa> 
+                <nombre>    salazar 
+                </nombre>
+                    <servicio nombre="envio"> 
+                        <alias> envie </alias>
+                        <alias> enviaron </alias>
+                    </servicio>
+                    <servicio nombre="recepcion">
+                        <alias> recibi </alias>
+                    </servicio>
             </empresa>
         
         </empresas_analizar>
     </diccionario>
     <lista_mensajes>
         <mensaje> 
-            Lugar y fecha: Guatemala, 01/04/2022 15:01 Usuario: 
-            map0001@usac.edu Red social: Twitter
+            Lugar y fecha: Guatemala, 01/01/2022 15:01 Usuario: 
+            map0001@usax.edu Red social: Twitter
+            El servicio la heladeria sarita fue muy malo, no atendieron aunqeu quede satisfecho con el 
+            producto que adquiri ventas usac inscribí
+        </mensaje>
+        <mensaje> 
+            Lugar y fecha: Guatemala, 
+            02/02/2022 15:20 Usuario: map0002@usxc.edu Red social: Facebook hoy envie un paquete por Salazar
+            espero que llegue a tiempo, dicen que su servicio es excelente.
+        </mensaje>
+        <mensaje> 
+            Lugar y fecha: Guatemala, 01/01/2022 15:43 Usuario: map0003@usas.edu 
+            Red social: WhatsApp
+            ya pedi los helados a sarita, dicen que los traeran a domicilio eso es cool
+        </mensaje>
+        <mensaje> 
+            Lugar y fecha: Guatemala, 04/04/2022 15:01 Usuario: 
+            map0004@usc.edu Red social: Twitter
             El servicio en la USAC para inscripción fue muy bueno y asignado me siento muy satisfecho.
         </mensaje>
         <mensaje> 
             Lugar y fecha: Guatemala, 
-            01/04/2022 15:20 Usuario: map0002@usac.edu Red social: Facebook Hoy me inscribí 
+            05/05/2022 15:20 Usuario: map0005@sac.edu Red social: Facebook Hoy me inscribí 
             en la USAC, no encontré parqueo e inicié graduación molesto mi gestión, luego tuve que hacer 
             cola y me indicaron que era la cola incorrecta, esto me enojó mucho y mejor me
             fui.
         </mensaje>
         <mensaje> 
-            Lugar y fecha: Guatemala, 01/04/2022 15:43 Usuario: map0003@usac.edu 
+            Lugar y fecha: Guatemala, 04/04/2022 15:43 Usuario: map0006@uac.edu 
             Red social: WhatsApp
             Ya estoy inscrito en la USAC, el proceso fue muy bueno, pero al salir, 
             mi carro tenía pinchadas las llantas, esto me preocupó 

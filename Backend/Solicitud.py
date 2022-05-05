@@ -16,7 +16,7 @@ class Solicitud:
 
     def mostrar_solicitud(self):
         print("----------------------------------- SOLICITUD --------------------------------------")
-        print(self.fecha.dar_todo())
+        #print(self.fecha.dar_todo())
         print("POSITIVOS")
         for pos in self.positivos:
             print(pos)

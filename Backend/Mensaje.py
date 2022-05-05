@@ -11,7 +11,7 @@ class Mensaje():
         self.empresas = empresas
 
     def dar_todo(self):
-        print("Fecha: "+self.fecha.dar_todo()+" usuario "+str(self.usuario)+" red social "+str(self.red)+" buenas "+str(self.cant_buenas)+" malas "+str(self.cant_malas))
+        print("Fecha: "+str(self.fecha)+" usuario "+str(self.usuario)+" red social "+str(self.red)+" buenas "+str(self.cant_buenas)+" malas "+str(self.cant_malas))
         for empresa in self.empresas:
             empresa.mostrar_empresa()
         print(self.mensaje)
