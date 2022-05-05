@@ -21,7 +21,7 @@ CORS(app)
 # 201 -> objeto creado
 # 400 -> peticion incorrecta
 # 404 -> no se encontro
-
+analisis_ = Analisis()
 
 # Ruta Raiz
 @app.route('/', methods=["GET"])
@@ -29,41 +29,45 @@ def Raiz():
     return jsonify({ "mensaje": "Servidor Levantado"}), 200
 
 
-# OPERACIONES ------------ CALCULADORA
+# OPERACIONES ------------ XML DE CARGAR
 @app.route('/enviar', methods=["POST"])
-def operar():
+def analizar_xml():
     # Parametros que nos envia el frontend
     print("entro")
     texto = str(request.json["entrada"])
     print(texto)
+    analisis_.analisis_solicitud(texto)
+    resul = analisis_.Generar_lista_respuestas()
+    
     print("entro")
-
-    resul = 'funciona'
 
     resultado = resul
     print(resultado)
     return jsonify({"resultado": resultado}), resultado
 
-# LETRAS ------------------------- FRASES 
-@app.route('/frase_', methods=["PUT"])
-def frases_conteo():
+# OPERACIONES ------------ XML DE MENSAJE PRUEBA
+@app.route('/mensaje_prueba', methods=["POST"])
+def analizar_mensaje_prueba():
     # Parametros que nos envia el frontend
     print("entro")
-    frase = request.json["frase"]
-    palabras = len(frase.split(" "))
-    print(palabras)
+    mensaje = str(request.json["entrada_prueba"])
+    print(mensaje)
+    resul = analisis_.Mensaje_prueba(mensaje)
+    
+    print("entro")
 
-    vocales = 0
-    for letra in frase:
-        if letra.lower() in "aeiou":
-            vocales+=1
+    resultado = resul
+    print(resultado)
+    return jsonify({"resultado": resultado}), resultado
 
-    consonantes = 0
-    for letra in frase:
-        if letra.lower() in "bcdfghjklmnñpqrstvwyz":
-            consonantes+=1
+# LETRAS ------------------------- MSTRAR LISTA DE RESPUESTAS
+@app.route('/mostrar_respuesta', methods=["GET"])
+def Mostrar_respuesta_xml():
+    # Parametros que nos envia el frontend
+    print("entro")
+    resultado = analisis_.respuesta_solicitud
 
-    return jsonify({"palabras": palabras,"vocales": vocales,"consonantes": consonantes}), 200
+    return jsonify({"resultado": resultado}), 200
 
 # NUMEROS PRIMOS --------------------------------------
 @app.route('/primos', methods=["POST"])

@@ -17,8 +17,10 @@ from Token import Token
 class Analisis():
     arreglo_solicitudes = []
     arreglo_respuesta = []
+    lista_respuestas = []
+    respuesta_solicitud = ''
     
-    def __init__(self, texto):
+    def analisis_solicitud(self, texto):
             self.analizador = Analizador_Lexico()
             
             doc = parseString(texto)
@@ -368,24 +370,45 @@ class Analisis():
                 mensaje_prueb.dar_todo()
 
                 salida = self.generar_xml_mensaje_prueba(mensaje_prueb)
-                print(salida)
+                
+                return salida
                 
 
                      
-    def Buscar_por_fecha(self, fecha1, fecha2, empresas):
+    def Buscar_por_fecha(self, fecha1, fecha2, empresa):
         arreglo_devolver =[]
-        arreglo_res = self.arreglo_respuesta
+        devolver_filtro_emp = []
+        arreglo_res = self.lista_respuestas
+        fecha_comp1 = Date(fecha1.año, fecha1.mes, fecha1.dia)
+        fecha_comp2 = Date(fecha2.año, fecha2.mes, fecha2.dia)
 
 
-        if fecha1.dia != 0 and fecha2 == 0:#QUIERE DECIR QUE SE QUIERE SOLO UNA FECHA
-            pass
+        if fecha1.dia != 0 and fecha2.dia == 0:#QUIERE DECIR QUE SE QUIERE SOLO UNA FECHA
+            for respuesta in arreglo_res:
+                if respuesta.fecha == fecha_comp1:
+                    arreglo_devolver.append(respuesta)
         elif fecha1 != 0 and fecha2 != 0: #SE QUIERE UN RANGO DE FECHAS
-            pass
-        pass    
+            for respuesta in arreglo_res:
+                if respuesta.fecha >= fecha_comp1 and respuesta.fecha <= fecha_comp2:
+                    arreglo_devolver.append(respuesta)
+        
+        if empresa == 'Todas':
+            respuesta = self.generar_xml(arreglo_devolver)
+            return respuesta
+        else: 
+            for respuesta in arreglo_devolver: 
+                for empresa in respuesta.empresas:
+                    if empresa.nombre.upper() == empresa.upper():
+                        devolver_filtro_emp.append(respuesta)
+            respuesta = self.generar_xml(devolver_filtro_emp)
+            return respuesta
+            
+
+
 
     def Generar_lista_respuestas(self):
         todos_mensajes = self.arreglo_solicitudes[0].mensajes
-        lista_respuestas = []
+        
         lista_mensajes_a_ordenar = []
         lista_mensajes_a_ordenar.append(todos_mensajes[0])
         lista_mensajes_general = []
@@ -414,11 +437,12 @@ class Analisis():
             negativos = empresas_mensajes[3]
             total = neutros+positivos+negativos
             nueva_respuesta = Respuesta(a.fecha,total, positivos, negativos, neutros,empresas,mensajes )
-            lista_respuestas.append(nueva_respuesta)
-        for respuesta in lista_respuestas:
+            self.lista_respuestas.append(nueva_respuesta)
+        for respuesta in self.lista_respuestas:
             respuesta.dar_todo()
-        respuesta_solicitud = self.generar_xml(lista_respuestas)
-        print(respuesta_solicitud)
+        self.respuesta_solicitud = self.generar_xml(self.lista_respuestas)
+        print(self.respuesta_solicitud)
+        return self.respuesta_solicitud
 
 
     def generar_xml(self, lista_res):
@@ -452,10 +476,13 @@ class Analisis():
         return respuesta
     
     def generar_xml_mensaje_prueba(self, mensaje):
-        respuesta = '<respuesta>\n '
+        respuesta = '''
+        <?xml version="1.0"?>\n
+            <respuesta>\n '
+        '''
         respuesta += ' <fecha>'+str(mensaje.fecha)+'</fecha>\n'
         respuesta += '<red_social>'+str(mensaje.red)+'</red_social>\n'
-        respuesta += '<usuario>'+str(mensaje.usuario)+'</usuario>\n'
+        respuesta += '<usuario>'+str(mensaje.usuario)+'</usuario>'
         respuesta += '<empresas>'
         for empresa in mensaje.empresas:
             respuesta += '<empresa nombre=\"'+str(empresa.nombre)+'\">\n'
@@ -479,7 +506,7 @@ class Analisis():
             sentimiento = 'negativo'
         else:
             sentimiento = 'positivo'
-        respuesta += '<sentimiento_analizado>'+sentimiento+'</sentimiento_analizado>\n </respuesta>'
+        respuesta += '<sentimiento_analizado>'+sentimiento+'</sentimiento_analizado> </respuesta>'
         return respuesta
 
 
@@ -502,7 +529,8 @@ def main(): #METODO PRINCIPAL QUE INVOCA AL MENU2  TOP INFERIOR TEMPORADA <1999-
     #app.Positivos_negativos()
 
     print("pureba")
-    #app.Generar_lista_respuestas()
+    final = app.Generar_lista_respuestas()
+    print(final)
 
     archi2=open('mensaje.xml', "r", encoding="utf-8")
     contenido=archi2.read()
