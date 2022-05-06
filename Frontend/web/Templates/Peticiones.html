@@ -1,0 +1,123 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Peticiones</title>
+	<link href="{% static '/assets/css/estilohoja.css' %}" rel="stylesheet">
+	<meta charset="utf-8">
+	<meta content="width=device-width, initial-scale=1.0" name="viewport">
+  
+	<title>My App</title>
+	<meta content="" name="description">
+	<meta content="" name="keywords">
+  
+	<!-- Favicons 
+	<link href="assets/img/favicon.png" rel="icon">
+	<link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">-->
+	<link  href="{% static '/assets/img/favicon.png' %}" rel="icon">
+	<link  href="{% static '/assets/img/apple-touch-icon.png' %}" rel="apple-touch-icon">
+  
+	<!-- Google Fonts -->
+	<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+  
+	<!-- Vendor CSS Files 
+	<link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+	<link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+	<link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+	<link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+	<link href="assets/vendor/remixicon/remixicon.css" rel="stylesheet">
+	<link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+	-->
+	<link href="{% static '/assets/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+	<link href="{% static '/assets/vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
+	<link href="{% static '/assets/vendor/boxicons/css/boxicons.min.css' %}" rel="stylesheet">
+	<link href="{% static '/assets/vendor/glightbox/css/glightbox.min.css' %}" rel="stylesheet">
+	<link href="{% static '/assets/vendor/remixicon/remixicon.css' %}" rel="stylesheet">
+	<link href="{% static '/assets/vendor/swiper/swiper-bundle.min.css' %}" rel="stylesheet">
+  
+	
+  
+	<!-- Template Main CSS File -->
+	<link href="{% static '/assets/css/style.css' %}" rel="stylesheet">
+	
+</head>
+<body>
+
+<img src="{% static '/assets/img/logo.png' %}" width="200" height="200" align=right>
+
+<section id="features" class="features"><div class="text-center">
+	<div class="container">
+	  <div class="section-title">
+		<h3>Petici<span>ones</span></h3>
+	  </div>
+	  <div class="input-group mb-3">
+		<textarea name="consulta" rows="15" cols="100" class="form-control" placeholder="Consulta">{{consulta}}</textarea>
+	  </div>
+	  <div class="row">
+		  <form method="get">
+		<div class="col-lg-6 col-md-4 col-6">
+		  <div class="icon-box">
+			<i class="ri-bar-chart-box-line" style="color: #5578ff;"></i>
+			<h3><a href="Peticiones.html">Resumen de clasificación por fecha</a></h3>
+			<br>
+			<div class="input-group mb-3">
+				<input name = "dia" type="number" class="form-control" placeholder="Dia"/>
+				<input name = "mes" type="number" class="form-control" placeholder="Mes"/>
+				<input name = "año" type="number" class="form-control" placeholder="Año"/>
+			</div>
+		  </div>
+		  <div class="input-group mb-3">
+			<input name = "empresa" type="text" class="form-control" placeholder="Empressa"/>
+		  </div>
+			<div class="input-group mb-3">
+				<textarea name="peticion_1" rows="15" cols="100" class="form-control" placeholder="Peticiones">{{ peticion_1 }}</textarea>
+			</div>
+			<input type="submit" value="Enviar"/>
+		</div></form>
+		
+		<form method="get">
+			<div class="col-lg-6 col-md-4 col-6 mt-4 mt-md-0">
+				<div class="icon-box">
+					<i class="ri-calendar-todo-line" style="color: #e80368;"></i>
+					<h3><a href="Peticiones.html">Resumen por rango de fechas</a></h3>
+					<br>
+					<div class="input-group mb-3">
+						<input name = "dia1" type="number" class="form-control" placeholder="Djia"/>
+						<input name = "mes1" type="number" class="form-control" placeholder="Mes"/>
+						<input name = "año1" type="number" class="form-control" placeholder="Año"/>
+					</div>
+					<div class="input-group mb-3">
+						<input name = "dia2" type="number" class="form-control" placeholder="Dia"/>
+						<input name = "mes2" type="number" class="form-control" placeholder="Mes"/>
+						<input name = "año2" type="number" class="form-control" placeholder="Año"/>
+					</div>
+				</div>
+				<div class="input-group mb-3">
+					<input name = "empresa_2" type="text" class="form-control" placeholder="Empresa"/>
+				</div>
+				<div class="input-group mb-3">
+					<textarea name="peticion_" rows="15" cols="100" class="form-control" placeholder="Peticiones">{{ peticion_ }}</textarea>
+				</div>
+				<input type="submit" value="Enviar"/>
+			</div> </form>
+			
+			
+		</div>
+		
+		</div>
+		
+			
+			
+	</div></div>
+  </section><!-- End Features Section -->
+
+  <script src="{% static '/assets/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static '/assets/vendor/glightbox/js/glightbox.min.js' %}"></script>
+  <script src="{% static '/assets/vendor/isotope-layout/isotope.pkgd.min.js' %}"></script>
+  <script src="{% static '/assets/vendor/swiper/swiper-bundle.min.js' %}"></script>
+  <script src="{% static '/assets/vendor/php-email-form/validate.js' %}"></script>
+  <script src="{% static '/assets/js/main.js' %}"></script>
+  
+
+</body>
+</html>

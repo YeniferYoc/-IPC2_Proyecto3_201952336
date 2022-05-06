@@ -1,0 +1,36 @@
+body{
+	background-color:pink;/*color de la pagina*/
+	font-family: Comic Sans MS; 
+}
+h1{
+	color:black;
+	text-align:center; 
+}
+form{
+	background-color:  white;/*color del formulario*/
+	border-radius: 3px;/*esquinas*/
+	color: #999;/*color de la letra*/
+	font-size: 1em;/*tamaño de la letra*/
+	padding: 70px;/*tamaño*/
+	margin: auto;/*margen*/
+	width: 700px;/*ancho*/
+}
+input, textarea{/*mensaje*/
+	border:0;/*borde*/
+	outline: none;/**/
+	width: 280px;/*ancho*/
+}
+.field{/*caja de texto*/
+border:solid 1px #ccc;/*borde de la caja normalmente*/
+padding: 10px;/*tamaño*/
+}
+.field:focus{
+	border-color: #18A383;/*color cuando escriben*/
+}
+.center-content{
+	text-align: center;/*alineacion del texto*/
+}
+
+
+
+

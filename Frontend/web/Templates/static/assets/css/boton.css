@@ -1,0 +1,21 @@
+.btn{
+	border-radius: 3px;/*esquina*/
+	display: inline-block;
+	padding: 20px 15px;/*tamaño*/
+	text-decoration: none;/*decoracion del texto*/
+	font-family: Comic Sans MS; 
+	text-shadow: 0 1px 0 rgba(255,255,255,0.3);/*borde del texto*/
+	box-shadow:  0 1px 1px rgba(0,0,0,0.3);/*borde del boton*/
+	align-content: center;
+}
+.btn-green{
+	color: white;/*color de la letra*/
+	background-color: #0E0440;	/*color del boton normal*/
+}
+.btn-green:hover{
+background-color: #C0C0C0;/*color cuando le pase por encima*/
+
+}
+.btn-green:active{
+	background-color: #29962A;/*color cuando se active*/
+}

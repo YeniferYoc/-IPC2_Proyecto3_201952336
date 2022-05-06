@@ -1,4 +1,4 @@
-from flask import Flask, json, request, jsonify
+from flask import Flask, Response,json, request, jsonify
 from flask_cors import CORS
 from Analizar_xml import *
 from Fecha import *
@@ -7,7 +7,7 @@ from Fecha import *
 
 # Inicializar flask
 app = Flask(__name__)
-CORS(app)
+cors = CORS(app, resources={r"/*": {"origin": "*"}})
 
 # Métodos de peticiones
 
@@ -31,27 +31,33 @@ def Raiz():
 
 
 # OPERACIONES ------------ XML DE CARGAR
-@app.route('/enviar', methods=["POST"])
+@app.route('/enviar', methods=["GET"])
 def analizar_xml():
     # Parametros que nos envia el frontend
     print("entro")
-    texto = str(request.json["entrada"])
+    texto = str(request.args.get('entrada'))
     print(texto)
-    analisis_.analisis_solicitud(texto)
-    resul = analisis_.Generar_lista_respuestas()
+    if texto == "None":  
+        print("none")
+        resul = 'no jalo el texto'
+    else:  
+        print("ahdkf") 
+        analisis_.analisis_solicitud(texto)
+        resul = analisis_.Generar_lista_respuestas()
     
     print("entro")
 
     resultado = resul
     print(resultado)
-    return jsonify({"resultado": resultado}), resultado
+    #Response(response = resultado)
+    return str(resultado)
 
 # OPERACIONES ------------ XML DE MENSAJE PRUEBA
-@app.route('/mensaje_prueba', methods=["POST"])
+@app.route('/mensaje_prueba', methods=["GET"])
 def analizar_mensaje_prueba():
     # Parametros que nos envia el frontend
     print("entro")
-    mensaje = str(request.json["entrada_prueba"])
+    mensaje = str(request.args.get('mensaje'))
     print(mensaje)
     resul = analisis_.Mensaje_prueba(mensaje)
     
@@ -59,20 +65,20 @@ def analizar_mensaje_prueba():
 
     resultado = resul
     print(resultado)
-    return jsonify({"resultado": resultado}), resultado
+    return str(resultado)
 
 # OPERACIONES ------------ PETICIONESDE FECHA
-@app.route('/peticiones_fecha', methods=["POST"])
+@app.route('/peticiones_fecha', methods=["GET"])
 def peticiones_fecha():
     # Parametros que nos envia el frontend
     print("entro")
-    dia1 = int(request.json["dia1"])
-    mes1 = int(request.json["mes1"])
-    año1= int(request.json["año1"])
-    dia2 = int(request.json["dia2"])
-    mes2 = int(request.json["mes2"])
-    año2 = int(request.json["año2"])
-    empresa = str(request.json["empresa"])
+    dia1 = int(request.args.get('dia1'))
+    mes1 = int(request.args.get('mes1'))
+    año1= int(request.args.get('año1'))
+    dia2 = int(request.args.get('dia2'))
+    mes2 = int(request.args.get('mes2'))
+    año2 = int(request.args.get('año2'))
+    empresa = str(request.args.get('empresa'))
     fecha1 = Fecha(dia1, mes1, año1)
     fecha2 = Fecha(dia2, mes2, año2)
     resul = analisis_.Buscar_por_fecha(fecha1, fecha2, empresa)
@@ -81,25 +87,27 @@ def peticiones_fecha():
 
     resultado = resul
     print(resultado)
-    return jsonify({"resultado": resultado}), resultado
+    return str(resultado)
 
 # OPERACIONES ------------ PETICIONESDE FECHA
-@app.route('/peticiones_fecha_una', methods=["POST"])
+@app.route('/peticiones_fecha_una', methods=["GET"])
 def peticiones_fecha_una():
     # Parametros que nos envia el frontend
-    print("entro")
-    dia1 = int(request.json["dia1"])
-    mes1 = int(request.json["mes1"])
-    año1= int(request.json["año1"])
-    empresa = str(request.json["empresa"])
+    print("entrodd")
+    dia1 = int(request.args.get('dia'))
+    mes1 = int(request.args.get('mes'))
+    año1= int(request.args.get('año'))
+    empresa = str(request.args.get('empresa'))
     fecha1 = Fecha(dia1, mes1, año1)
+    print("ddd"+fecha1.dar_todo())
+    print(año1)
     resul = analisis_.Buscar_por_una_fecha(fecha1, empresa)
     
     print("entro")
 
     resultado = resul
     print(resultado)
-    return jsonify({"resultado": resultado}), resultado
+    return str(resultado)
 
 # LETRAS ------------------------- MSTRAR LISTA DE RESPUESTAS
 @app.route('/mostrar_respuesta', methods=["GET"])

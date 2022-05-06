@@ -1,4 +1,4 @@
-from flask import Flask, json, request, jsonify
+from flask import Flask, Response,json, request, jsonify
 from flask_cors import CORS
 from Analizar_xml import *
 from Fecha import *
@@ -7,7 +7,7 @@ from Fecha import *
 
 # Inicializar flask
 app = Flask(__name__)
-CORS(app)
+cors = CORS(app, resources={r"/*": {"origin": "*"}})
 
 # Métodos de peticiones
 
@@ -35,8 +35,8 @@ def Raiz():
 def analizar_xml():
     # Parametros que nos envia el frontend
     print("entro")
-    texto = str(request.json["entrada"])
-    print(texto)
+    texto = request.data.decode('utf-8')
+    
     analisis_.analisis_solicitud(texto)
     resul = analisis_.Generar_lista_respuestas()
     
@@ -44,6 +44,7 @@ def analizar_xml():
 
     resultado = resul
     print(resultado)
+    #Response(response = resultado)
     return jsonify({"resultado": resultado}), resultado
 
 # OPERACIONES ------------ XML DE MENSAJE PRUEBA
@@ -51,7 +52,7 @@ def analizar_xml():
 def analizar_mensaje_prueba():
     # Parametros que nos envia el frontend
     print("entro")
-    mensaje = str(request.json["entrada_prueba"])
+    mensaje = request.data.decode('utf-8')
     print(mensaje)
     resul = analisis_.Mensaje_prueba(mensaje)
     
@@ -66,13 +67,13 @@ def analizar_mensaje_prueba():
 def peticiones_fecha():
     # Parametros que nos envia el frontend
     print("entro")
-    dia1 = int(request.json["dia1"])
-    mes1 = int(request.json["mes1"])
-    año1= int(request.json["año1"])
-    dia2 = int(request.json["dia2"])
-    mes2 = int(request.json["mes2"])
-    año2 = int(request.json["año2"])
-    empresa = str(request.json["empresa"])
+    dia1 = int(request.args.get('dia1'))
+    mes1 = int(request.args.get('mes1'))
+    año1= int(request.args.get('año1'))
+    dia2 = int(request.args.get('dia2'))
+    mes2 = int(request.args.get('mes2'))
+    año2 = int(request.args.get('año2'))
+    empresa = str(request.args.get('empresa'))
     fecha1 = Fecha(dia1, mes1, año1)
     fecha2 = Fecha(dia2, mes2, año2)
     resul = analisis_.Buscar_por_fecha(fecha1, fecha2, empresa)

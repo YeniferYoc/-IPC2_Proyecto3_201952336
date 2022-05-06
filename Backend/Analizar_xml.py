@@ -11,6 +11,7 @@ from Empresa import Empresa
 from Fecha import Fecha
 from Servicio import Servicio
 from Solicitud import Solicitud
+from reportlab.pdfgen import canvas
 from Analizador_Lexico import *
 import re 
 from Token import Token
@@ -416,6 +417,7 @@ class Analisis():
         
             if empresa_ == 'Todas':
                 respuesta = self.generar_xml(arreglo_devolver)
+                self.Reporte(arreglo_devolver)
                 return respuesta
             else: 
                 for respuesta in arreglo_devolver: 
@@ -423,10 +425,99 @@ class Analisis():
                         if empresa.nombre.upper() == empresa_.upper():
                             devolver_filtro_emp.append(respuesta)
                 respuesta = self.generar_xml(devolver_filtro_emp)
+                self.Reporte(devolver_filtro_emp)
                 return respuesta
             
 
+    def Reporte(self,lista_res):
+        c = canvas.Canvas("reporte.pdf")
+        contador_lin = 750
+        c.drawString(100,contador_lin,'CLASIFICACION DE RESPUESTAS ')
+        contador_lin -= 30
+    
+        for respuesta_lista in lista_res:
+            c.drawString(100,contador_lin,'RESPUESTA: ')
+            contador_lin -= 30
+            c.drawString(100,contador_lin,'FECHA: '+str(respuesta_lista.fecha))
+            contador_lin -= 30
+            c.drawString(100,contador_lin,'TOTAL: '+str(respuesta_lista.total))
+            contador_lin -= 30
+            c.drawString(100,contador_lin,'POSITIVOS: '+str(respuesta_lista.positivos))
+            contador_lin -= 30
+            c.drawString(100,contador_lin,'NEGATIVOS: '+str(respuesta_lista.negativos))
+            contador_lin -= 30
+            c.drawString(100,contador_lin,'NEUTROS: '+str(respuesta_lista.neutros))
+            contador_lin -= 30
+            
+            for empresa in respuesta_lista.empresas:
+                      
+                c.drawString(100,contador_lin,'NOMBRE EMPRESA: '+(str(empresa.nombre)))
+                contador_lin -= 30
+                
+                total_men_emp = int(empresa.buenos)+int(empresa.malos)+int(empresa.neutros)
+                c.drawString(100,contador_lin,'TOTAL: '+(str(total_men_emp)))
+                contador_lin -= 30
+                c.drawString(100,contador_lin,'POSITIVOS: '+(str(empresa.buenos)))
+                contador_lin -= 30
+                c.drawString(100,contador_lin,'NEGATIVOS: '+(str(empresa.malos)))
+                contador_lin -= 30
+                c.drawString(100,contador_lin,'NEUTROS: '+(str(empresa.neutros)))
+                contador_lin -= 30
+                c.drawString(100,contador_lin,'SERVICIOS: ')
+                contador_lin -= 30
+                
+                for servicio in empresa.servicios:
+                    c.drawString(100,contador_lin,'NOMBRE SERVICIO: '+str(servicio.nombre_ser))
+                    contador_lin -= 30
+                    
+                    total_men_ser = int(servicio.buenos)+int(servicio.malos)+int(servicio.neutros)
+                    c.drawString(100,contador_lin,'TOTAL: '+str(total_men_ser))
+                    contador_lin -= 30
+                    c.drawString(100,contador_lin,'POSITIVOS: '+str(servicio.buenos))
+                    contador_lin -= 30
+                    c.drawString(100,contador_lin,'NEGATIVOS: '+str(servicio.malos))
+                    contador_lin -= 30
+                    c.drawString(100,contador_lin,'NEUTROS: '+str(servicio.neutros))
+                    contador_lin = 750
+        
 
+        c.save()
+                    
+        
+    
+    def generar_xml_mensaje_prueba(self, mensaje):
+        respuesta = '''
+        <?xml version="1.0"?>\n
+            <respuesta>\n '
+        '''
+        respuesta += ' <fecha>'+str(mensaje.fecha)+'</fecha>\n'
+        respuesta += '<red_social>'+str(mensaje.red)+'</red_social>\n'
+        respuesta += '<usuario>'+str(mensaje.usuario)+'</usuario>'
+        respuesta += '<empresas>'
+        for empresa in mensaje.empresas:
+            respuesta += '<empresa nombre=\"'+str(empresa.nombre)+'\">\n'
+            for servicio in empresa.servicios:
+                respuesta += '<servicio>'+str(servicio.nombre_ser)+'</servicio>\n'
+            respuesta += '</empresa>\n'
+        respuesta += '</empresas>\n'
+        respuesta += '<palabras_positivas>'+str(mensaje.cant_buenas)+'</palabras_positivas>\n'
+        respuesta += '<palabras_negativas>'+str(mensaje.cant_malas)+'</palabras_negativas>\n'
+        total_palabras = int(mensaje.cant_buenas)+int(mensaje.cant_malas)
+        porcentaje_buenas = ((int(mensaje.cant_buenas)*100)/total_palabras)
+        porcentaje_malas = 100-porcentaje_buenas
+        respuesta += '<sentimiento_positivo>'+ str(porcentaje_buenas)+'% </sentimiento_positivo>\n'
+        respuesta += '<sentimiento_negativo>'+str(porcentaje_malas)+'% </sentimiento_negativo>\n'
+        buenas = int(mensaje.cant_buenas)
+        malas = int(mensaje.cant_malas)
+        sentimiento = 'neutro'
+        if buenas == malas:
+            sentimiento = 'neutro'
+        elif buenas < malas:
+            sentimiento = 'negativo'
+        else:
+            sentimiento = 'positivo'
+        respuesta += '<sentimiento_analizado>'+sentimiento+'</sentimiento_analizado> </respuesta>'
+        return respuesta
 
     def Generar_lista_respuestas(self):
         todos_mensajes = self.arreglo_solicitudes[0].mensajes
@@ -547,18 +638,20 @@ def main(): #METODO PRINCIPAL QUE INVOCA AL MENU2  TOP INFERIOR TEMPORADA <1999-
     contenido=archi1.read()
     archi1.close()
 
-    app = Analisis(contenido)
+    app = Analisis()
+    app.analisis_solicitud(contenido)
+    
     #app.Positivos_negativos()
 
-    print("pureba")
+    '''print("pureba")
     final = app.Generar_lista_respuestas()
-    print(final)
+    print(final)'''
 
-    archi2=open('mensaje.xml', "r", encoding="utf-8")
+    '''archi2=open('mensaje.xml', "r", encoding="utf-8")
     contenido=archi2.read()
     archi2.close()
     print("MENSAJE PRUEBA---------------------------------------")
-    app.Mensaje_prueba(contenido)
+    app.Mensaje_prueba(contenido)'''
 
 
 if __name__ == "__main__":
