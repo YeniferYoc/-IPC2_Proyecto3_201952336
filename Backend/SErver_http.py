@@ -52,6 +52,8 @@ def analizar_xml():
     #Response(response = resultado)
     return str(resultado)
 
+
+
 # OPERACIONES ------------ XML DE MENSAJE PRUEBA
 @app.route('/mensaje_prueba', methods=["GET"])
 def analizar_mensaje_prueba():

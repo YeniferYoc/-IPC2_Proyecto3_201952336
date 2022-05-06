@@ -127,20 +127,4 @@ def Peticiones(request):
         return render(request, 'Peticiones.html', context)
 
 
-def calc(request):
-    if request.method == 'GET':
-        num_1 = request.GET.get('num_1', 0)
-        num_2 = request.GET.get('num_2', 0)
 
-        url = endpoint.format('/potencia')
-
-        potencia = requests.get(url, {
-            'num_1': num_1,
-            'num_2': num_2,
-        })
-
-        context = {
-            'potencia': potencia.text,
-        }
-
-        return render(request, 'calc.html', context)

@@ -395,6 +395,7 @@ class Analisis():
         
         if empresa_ == 'Todas':
             respuesta = self.generar_xml(arreglo_devolver)
+            self.Reporte(arreglo_devolver)
             return respuesta
         else: 
             for respuesta in arreglo_devolver: 
@@ -402,6 +403,7 @@ class Analisis():
                     if empresa.nombre.upper() == empresa_.upper():
                         devolver_filtro_emp.append(respuesta)
             respuesta = self.generar_xml(devolver_filtro_emp)
+            self.Reporte(devolver_filtro_emp)
             return respuesta
     
     def Buscar_por_una_fecha(self, fecha1, empresa_):
@@ -436,6 +438,8 @@ class Analisis():
         contador_lin -= 30
     
         for respuesta_lista in lista_res:
+            c.showPage()
+            contador_lin = 750
             c.drawString(100,contador_lin,'RESPUESTA: ')
             contador_lin -= 30
             c.drawString(100,contador_lin,'FECHA: '+str(respuesta_lista.fecha))
@@ -450,7 +454,8 @@ class Analisis():
             contador_lin -= 30
             
             for empresa in respuesta_lista.empresas:
-                      
+                c.showPage()
+                contador_lin = 750      
                 c.drawString(100,contador_lin,'NOMBRE EMPRESA: '+(str(empresa.nombre)))
                 contador_lin -= 30
                 
