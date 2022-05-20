@@ -3,7 +3,7 @@ YENIFER ESTER YOC LARIOS
 
 PROYECTO 3 IPC2, 
 
-Agregue el enunciado del proyecto, los archivos de calificacion y algunos resultados que arrojaron. 
+Agregue el enunciado del proyecto, los archivos de calificacion, la hoja de calificación y algunos resultados que arrojaron. 
 Espero les sirva :)
 
 
