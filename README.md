@@ -6,6 +6,7 @@ PROYECTO 3 IPC2,
 Agregue el enunciado del proyecto, los archivos de calificacion y algunos resultados que arrojaron. 
 Espero les sirva :)
 
+
 La empresa Tecnologías Chapinas, S.A. está desarrollando una herramienta que sea 
 capaz de analizar contenido de redes sociales y establecer el sentimiento de los usuarios 
 respecto a una empresa y los servicios que provee
